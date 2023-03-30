@@ -4,9 +4,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import 모던자바인액션.model.Dish;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -250,6 +253,317 @@ public class StreamTests {
                 .collect(Collectors.toList());
 
         Assertions.assertEquals(2, pairs.size());
+    }
+
+    @DisplayName("7-1. 검색과 매칭 (anyMatch 쇼트서킷) ")
+    @Test
+    void anyMatchTest(){
+        List<Dish> atLeastTrueMenu = Arrays.asList(
+                new Dish("pork1", false, 801, Dish.Type.MEAT),
+                new Dish("pork2", true, 802, Dish.Type.MEAT),
+                new Dish("pork3", false, 803, Dish.Type.MEAT));
+
+        List<Dish> allFalseMenu = Arrays.asList(
+                new Dish("pork1", false, 801, Dish.Type.MEAT),
+                new Dish("pork2", false, 802, Dish.Type.MEAT),
+                new Dish("pork3", false, 803, Dish.Type.MEAT));
+
+        Assertions.assertEquals(true, atLeastTrueMenu.stream()
+                .peek(dish -> System.out.println("true dish : " + dish))
+                .anyMatch(Dish::isVegetarian));
+        Assertions.assertEquals(false, allFalseMenu.stream()
+                .peek(dish -> System.out.println("false dish : " + dish))
+                .anyMatch(Dish::isVegetarian));
+    }
+
+    @DisplayName("7-2. 검색과 매칭 (allMatch 쇼트서킷) ")
+    @Test
+    void allMatchTest(){
+        List<Dish> allTrueMenu = Arrays.asList(
+                new Dish("pork", false, 801, Dish.Type.MEAT),
+                new Dish("chicken", false, 400, Dish.Type.MEAT),
+                new Dish("season fruit", true, 120, Dish.Type.OTHER));
+
+        List<Dish> atLeastFalseMenu = Arrays.asList(
+                new Dish("pork", false, 1200, Dish.Type.MEAT),
+                new Dish("chicken", false, 400, Dish.Type.MEAT),
+                new Dish("season fruit", true, 120, Dish.Type.OTHER));
+
+        Assertions.assertEquals(true, allTrueMenu.stream().allMatch(dish ->  dish.getCalories() < 1000));
+        Assertions.assertEquals(false, atLeastFalseMenu.stream()
+                .peek(dish -> System.out.println("dish : " + dish))
+                .allMatch(dish -> dish.getCalories() < 1000));
+    }
+
+    @DisplayName("7-3. 검색과 매칭 (noneMatch 쇼트서킷) ")
+    @Test
+    void noneMatchTest(){
+        List<Dish> atLeastFalseMenu = Arrays.asList(
+                new Dish("pork", false, 1200, Dish.Type.MEAT),
+                new Dish("chicken", false, 1400, Dish.Type.MEAT),
+                new Dish("season fruit", true, 1120, Dish.Type.OTHER));
+
+        List<Dish> allFalseMenu = Arrays.asList(
+                new Dish("pork", false, 801, Dish.Type.MEAT),
+                new Dish("chicken", false, 1400, Dish.Type.MEAT),
+                new Dish("season fruit", true, 120, Dish.Type.OTHER));
+
+        Assertions.assertEquals(true, atLeastFalseMenu.stream().noneMatch(dish ->  dish.getCalories() < 1000));
+        Assertions.assertEquals(false, allFalseMenu.stream()
+                .peek(dish -> System.out.println("false dish : " + dish))
+                .noneMatch(dish ->  dish.getCalories() < 1000));
+    }
+
+    @DisplayName("8-1. 요소 검색 (findAny 쇼트서킷) ")
+    @Test
+    void findAnyTest(){
+        List<Dish> dishes = Arrays.asList(
+                new Dish("pork", false, 1200, Dish.Type.MEAT),
+                new Dish("chicken", false, 1400, Dish.Type.MEAT),
+                new Dish("season fruit", true, 1120, Dish.Type.OTHER));
+
+        Optional<Dish> dish = dishes.stream()
+                .peek(d -> System.out.println("dish : " + d))
+                .filter(d -> d.getName() == "chicken")
+                .findAny();
+
+        Assertions.assertEquals(true, dish.isPresent());
+    }
+
+    @DisplayName("8-2. 요소 검색 (findFirst 쇼트서킷) ")
+    @Test
+    void findFirstTest(){
+        List<Dish> dishes = Arrays.asList(
+                new Dish("pork", false, 1200, Dish.Type.MEAT),
+                new Dish("chicken", false, 1400, Dish.Type.MEAT),
+                new Dish("season fruit", true, 1120, Dish.Type.OTHER));
+
+        Optional<Dish> dish = dishes.stream()
+                .peek(d -> System.out.println("dish : " + d))
+                .filter(d -> d.getType() == Dish.Type.MEAT)
+                .findFirst();
+
+        Assertions.assertEquals(true, dish.isPresent());
+    }
+
+    @DisplayName("9-1 리듀싱 (reduce)")
+    @Test
+    void reduceTest() {
+        List<Integer> numbers = Arrays.asList(1,2,3,4,5);
+        int sum = numbers.stream().reduce(0, Integer::sum);
+
+        Stream<Integer> stream = Stream.empty();
+        Optional<Integer> sum2 = stream.reduce(Integer::sum);
+
+        Assertions.assertEquals(15, sum);
+        Assertions.assertEquals(true, sum2.isEmpty());
+    }
+
+    @DisplayName("9-2 리듀싱 (max/min)")
+    @Test
+    void reduceMaxAndMinTest() {
+        List<Integer> numbers = Arrays.asList(1,2,5,4,5);
+        Optional<Integer> max = numbers.stream()
+                .peek(System.out::println)
+                .reduce(Integer::max);
+
+        System.out.println("====================================");
+
+        Integer max2 = numbers.stream()
+                .peek(System.out::println)
+                .reduce(7, Integer::max);
+
+        System.out.println("====================================");
+
+        Optional<Integer> min = numbers.stream()
+                .peek(System.out::println)
+                .reduce(Integer::min);
+
+        Assertions.assertEquals(5, max.get());
+        Assertions.assertEquals(7, max2);
+        Assertions.assertEquals(1, min.get());
+    }
+
+    @DisplayName("9-3 map과 reduce를 이용한 스트림의 요리 개수 계산")
+    @Test
+    void mapReduceTest() {
+        int count = menu.stream()
+                .map(dish -> 1)
+                .reduce(0, Integer::sum);
+        Assertions.assertEquals(menu.size(), count);
+    }
+
+    @DisplayName("10-1 기본형 특화 스트림 (mapToInt, mapToDouble, mapToLong)")
+    @Test
+    void intStreamTest() {
+        List<Dish> dishes = Arrays.asList(
+                new Dish("pork", false, 100, Dish.Type.MEAT),
+                new Dish("chicken", false, 200, Dish.Type.MEAT),
+                new Dish("season fruit", true, 300, Dish.Type.OTHER));
+
+        int calories = dishes.stream()
+                .mapToInt(Dish::getCalories)
+                .sum();
+
+        List<Dish> emptyDishes = Arrays.asList();
+        int emptyCalories = emptyDishes.stream()
+                .mapToInt(Dish::getCalories)
+                .sum();
+
+        Assertions.assertEquals(600, calories);
+        Assertions.assertEquals(0, emptyCalories);
+    }
+
+    @DisplayName("10-2 객체 스트림으로 복원하기")
+    @Test
+    void backupStream() {
+        IntStream intStream = menu.stream().mapToInt(Dish::getCalories);
+        Stream<Integer> stream = intStream.boxed();
+    }
+
+    @DisplayName("10-3 OptionalInt")
+    @Test
+    void optionalIntTest() {
+        List<Dish> dishes = Arrays.asList(
+                new Dish("pork", false, 100, Dish.Type.MEAT),
+                new Dish("chicken", false, 200, Dish.Type.MEAT),
+                new Dish("season fruit", true, 300, Dish.Type.OTHER));
+
+        OptionalInt maxCalories = dishes.stream()
+                .peek(System.out::println)
+                .mapToInt(Dish::getCalories)
+                .max();
+
+        int max = maxCalories.orElse(1);
+
+        List<Dish> emptyDishes = Arrays.asList();
+        OptionalInt emptyMaxCalories = emptyDishes.stream()
+                .mapToInt(Dish::getCalories)
+                .max();
+        int emptyMax = emptyMaxCalories.orElse(1);
+
+        Assertions.assertEquals(300, max);
+        Assertions.assertEquals(1, emptyMax);
+    }
+
+    @DisplayName("11-1 숫자 범위 (range, rangeClose)")
+    @Test
+    void rangeTest() {
+        IntStream closedEvenNumbers = IntStream.rangeClosed(1, 100) //시작값과 종료값이 포함
+                .filter(n -> n % 2 == 0);
+
+        IntStream evenNumbers = IntStream.range(1, 100) //시작값과 종료값이 포함
+                .filter(n -> n % 2 == 0);
+
+        Assertions.assertEquals(50, closedEvenNumbers.count());
+        Assertions.assertEquals(49, evenNumbers.count());
+    }
+
+    @DisplayName("12-1 피타고라스 수")
+    @Test
+    void pythagorasTest() {
+        Stream<double[]> pythagorasTriples = IntStream.rangeClosed(1, 100).boxed()
+                .flatMap(a -> IntStream.rangeClosed(a, 100)
+                        .mapToObj(b -> new double[]{a, b, Math.sqrt(a * a + b * b)})
+                        .filter(t -> t[2] % 1 == 0)
+                );
+
+        pythagorasTriples.limit(5)
+                .forEach(t -> System.out.println(t[0] + ", " + t[1] + ", " + t[2]));
+    }
+
+    @DisplayName("13-1 값으로 스트림 만들기")
+    @Test
+    void createStreamTest() {
+        Stream<String> stream = Stream.of("Modern", "Java", "In", "Action");
+        stream.map(String::toUpperCase)
+                .forEach(System.out::println);
+
+        Stream<String> emptyStream = Stream.empty();
+    }
+
+    @DisplayName("13-2 null이 될 수 있는 객체로 스트림 만들기")
+    @Test
+    void createNullableStreamTest() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("a", "a");
+        map.put("b", "b");
+
+        Stream<String> homeValueStream = Stream.ofNullable(map.get("c"));
+        Stream<String> values = Stream.of("a", "b", "c")
+                .flatMap(key -> Stream.ofNullable(map.get(key)));
+
+        Assertions.assertEquals(0, homeValueStream.count());
+        Assertions.assertEquals(2, values.count());
+    }
+
+    @DisplayName("13-3 배열로 스트림 만들기")
+    @Test
+    void createArrayStreamTest() {
+        int[] numbers = {1,2,3,4,5};
+        int sum = Arrays.stream(numbers).sum();
+
+        Assertions.assertEquals(15, sum);
+    }
+
+    @DisplayName("13-4 파일로 스트림 만들기")
+    @Test
+    void createFileStreamTest() {
+        long uniqueWords = 0;
+
+        try(Stream<String> lines = Files.lines(Paths.get("src/test/resources/data.txt"), Charset.defaultCharset())){
+            uniqueWords = lines.flatMap(line -> Arrays.stream(line.split(" ")))
+                    .distinct()
+                    .count();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Assertions.assertEquals(6, uniqueWords);
+    }
+
+    @DisplayName("13-5 함수로 무한 스트림 만들기 (iterate)")
+    @Test
+    void iterateTest() {
+        Stream.iterate(0, n -> n + 2)
+                .limit(10)
+                .forEach(System.out::println);
+    }
+
+    @DisplayName("13-6 피보나치 수열 만들기")
+    @Test
+    void fibonacciTest () {
+        Stream.iterate(new int[]{0, 1}, arr -> new int[]{arr[1], arr[0] + arr[1] } )
+                .limit(20)
+                .forEach(arr -> System.out.println("(" + arr[0] + "," + arr[1] + ")"));
+
+        System.out.println("===================================================");
+
+        Stream.iterate(new int[]{0, 1}, arr -> new int[]{arr[1], arr[0] + arr[1] } )
+                .limit(20)
+                .map(arr -> arr[0])
+                .forEach(n -> System.out.println("(" + n + ")"));
+    }
+
+    @DisplayName("13-7 무한 스트림 자르기")
+    @Test
+    void iterateTest2() {
+        IntStream.iterate(0, n -> n < 100, n -> n + 4)
+                .forEach(System.out::println);
+
+        System.out.println("======================================");
+
+        IntStream.iterate(0, n -> n + 4)
+                .takeWhile(n -> n < 100)
+                .forEach(System.out::println);
+    }
+
+    @DisplayName("13-8 무한 스트림 생성 (generate)")
+    @Test
+    void generateTest() {
+        Stream.generate(Math::random)
+                .limit(5)
+                .forEach(System.out::println);
     }
 
     List<Dish> getDishes() {
