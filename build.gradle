@@ -28,6 +28,9 @@ dependencies {
 
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
+    testImplementation group: 'org.openjdk.jmh', name: 'jmh-core', version: '1.36'
+    testImplementation group: 'org.openjdk.jmh', name: 'jmh-generator-annprocess', version: '1.36'
+
 }
 
 tasks.named('test') {
