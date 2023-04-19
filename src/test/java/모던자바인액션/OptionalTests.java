@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 
 import static org.mockito.Mockito.*;
 
-public class OptionalTests extends StreamBaseTest {
+public class OptionalTests {
 
     @DisplayName("11.3.1 Optional 객체 만들기")
     @Test
