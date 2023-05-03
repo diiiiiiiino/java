@@ -2,7 +2,9 @@ package com.example.javaspringbootstudy.service;
 
 import com.example.javaspringbootstudy.entity.Member;
 import com.example.javaspringbootstudy.enumertation.Grade;
+import org.springframework.stereotype.Component;
 
+@Component
 public class FixDiscountPolicy implements DiscountPolicy{
     private int discountFixAmount = 1000;
 

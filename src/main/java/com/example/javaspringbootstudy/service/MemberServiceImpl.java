@@ -4,9 +4,11 @@ import com.example.javaspringbootstudy.entity.Member;
 import com.example.javaspringbootstudy.repository.MemberRepository;
 import com.example.javaspringbootstudy.repository.MemoryMemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@Component
 @RequiredArgsConstructor
-public class MemberServiceImpl implements  MemberService{
+public class MemberServiceImpl implements MemberService{
     private final MemberRepository memberRepository;
 
     @Override
@@ -17,5 +19,9 @@ public class MemberServiceImpl implements  MemberService{
     @Override
     public Member findMember(Long memberId) {
         return memberRepository.findById(memberId);
+    }
+
+    public MemberRepository getMemberRepository() {
+        return memberRepository;
     }
 }
