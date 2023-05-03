@@ -29,12 +29,12 @@ public class AllBeanTest {
         private final Map<String, DiscountPolicy> policyMap;
         private final List<DiscountPolicy> polices;
 
-        public DiscountService(Map<String, DiscountPolicy> policyMap, List<DiscountPolicy> policies){
+        public DiscountService(Map<String, DiscountPolicy> policyMap, List<DiscountPolicy> polices){
             this.policyMap = policyMap;
-            this.polices = policies;
+            this.polices = polices;
 
-            System.out.println("policyMap = " + policyMap);
-            System.out.println("polices = " + polices);
+            System.out.println("policyMap = " + this.policyMap);
+            System.out.println("polices = " + this.polices);
         }
 
         public int discount(Member member, int price, String discountCode) {
