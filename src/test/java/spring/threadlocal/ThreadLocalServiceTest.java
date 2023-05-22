@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 import spring.threadlocal.code.FieldService;
 import spring.threadlocal.code.ThreadLocalService;
 
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 class ThreadLocalServiceTest {
     @Test

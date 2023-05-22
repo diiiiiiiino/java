@@ -3,7 +3,6 @@ package 디자인패턴.템플릿메서드패턴;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Locale;
 
 public class Coffee extends CaffeineBeverage{
 

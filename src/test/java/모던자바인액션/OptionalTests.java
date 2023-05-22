@@ -1,25 +1,15 @@
 package 모던자바인액션;
 
-import lombok.Data;
 import lombok.Getter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import 객체지향.구성.Car;
-import 모던자바인액션.model.Dish;
-import 모던자바인액션.model.Trader;
-import 모던자바인액션.model.Transaction;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
-
-import static org.mockito.Mockito.*;
 
 public class OptionalTests {
 

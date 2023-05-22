@@ -5,9 +5,7 @@ import com.example.javaspringbootstudy.entity.Member;
 import com.example.javaspringbootstudy.entity.Order;
 import com.example.javaspringbootstudy.enumertation.Grade;
 import com.example.javaspringbootstudy.service.MemberService;
-import com.example.javaspringbootstudy.service.MemberServiceImpl;
 import com.example.javaspringbootstudy.service.OrderService;
-import com.example.javaspringbootstudy.service.OrderServiceImpl;
 
 public class OrderApp {
     public static void main(String[] args) {

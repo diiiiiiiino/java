@@ -4,7 +4,6 @@ import com.example.javaspringbootstudy.config.AppConfig;
 import com.example.javaspringbootstudy.entity.Member;
 import com.example.javaspringbootstudy.enumertation.Grade;
 import com.example.javaspringbootstudy.service.MemberService;
-import com.example.javaspringbootstudy.service.MemberServiceImpl;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -3,7 +3,6 @@ package com.example.javaspringbootstudy.controller;
 import com.example.javaspringbootstudy.entity.MyLogger;
 import com.example.javaspringbootstudy.service.LogDemoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;

@@ -3,7 +3,6 @@ package com.example.javaspringbootstudy.service;
 import com.example.javaspringbootstudy.entity.Member;
 import com.example.javaspringbootstudy.entity.Order;
 import com.example.javaspringbootstudy.repository.MemberRepository;
-import com.example.javaspringbootstudy.repository.MemoryMemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
