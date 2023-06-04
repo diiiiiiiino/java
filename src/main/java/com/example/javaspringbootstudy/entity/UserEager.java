@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Userr {
+public class UserEager {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
@@ -22,5 +22,5 @@ public class Userr {
     String name;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    List<Orderr> orderrs = new ArrayList<>();
+    List<OrderEager> orders = new ArrayList<>();
 }
