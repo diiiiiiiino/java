@@ -80,16 +80,13 @@ public class CascadeTest {
         entityManager.persist(child1);
         entityManager.persist(child2);
 
-        entityManager.clear();
-
-        ParentOrphan parentOrphan = entityManager.find(ParentOrphan.class, 1L);
-        parentOrphan.getChildren().remove(0);
+        entityManager.remove(parent);
 
         List<ChildOrphan> childs = entityManager.createQuery(
                         " select a" +
                                 " from ChildOrphan a ", ChildOrphan.class)
                 .getResultList();
 
-        Assertions.assertEquals(1, childs.size());
+        Assertions.assertTrue(childs.isEmpty());
     }
 }
