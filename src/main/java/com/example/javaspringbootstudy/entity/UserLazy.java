@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@NamedEntityGraph(name = "UserLazy.withOrder", attributeNodes = { @NamedAttributeNode(value = "orders") })
 @Getter
 @Builder
 @Entity
