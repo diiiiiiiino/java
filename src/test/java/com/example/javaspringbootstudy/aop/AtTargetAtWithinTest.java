@@ -1,4 +1,4 @@
-package aop;
+package com.example.javaspringbootstudy.aop;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -35,6 +35,11 @@ public class AtTargetAtWithinTest {
         public Child child(){
             return new Child();
         }
+
+        @Bean
+        public AtTargetAtWithinAspect atTargetAtWithinAspect() {
+            return new AtTargetAtWithinAspect();
+        }
     }
 
     static class Parent {
@@ -48,18 +53,17 @@ public class AtTargetAtWithinTest {
 
     @Slf4j
     @Aspect
-    @Component
     static class AtTargetAtWithinAspect {
 
         //@target: 인스턴스 기준으로 모든 메서드의 조인 포인트를 선정, 부모 타입의 메서드도 적용
-        @Around("execution(* com.example..*(..)) && @target(com.example.javaspringbootstudy.aop.ClassAop))")
+        @Around("execution(* com.example..*(..)) && @target(com.example.javaspringbootstudy.com.example.javaspringbootstudy.aop.ClassAop))")
         public Object atTarget(ProceedingJoinPoint joinPoint) throws Throwable{
             log.info("[@target] {}", joinPoint.getSignature());
             return joinPoint.proceed();
         }
 
         //@within: 선택된 클래스 내부에 있는 메서드만 조인 포인트로 선정, 부모 타입의 메서드는 적용되지 않음
-        @Around("execution(* com.example..*(..)) && @within(com.example.javaspringbootstudy.aop.ClassAop))")
+        @Around("execution(* com.example..*(..)) && @within(com.example.javaspringbootstudy.com.example.javaspringbootstudy.aop.ClassAop))")
         public Object atWithin(ProceedingJoinPoint joinPoint) throws Throwable{
             log.info("[@within] {}", joinPoint.getSignature());
             return joinPoint.proceed();

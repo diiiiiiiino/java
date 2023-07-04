@@ -1,4 +1,4 @@
-package aop;
+package com.example.javaspringbootstudy.aop;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +27,7 @@ public class ExecutionTest {
 
     @Test
     void exactMatch() {
-        pointcut.setExpression("execution(public String com.example.javaspringbootstudy.aop.AopServiceImpl.hello(String))");
+        pointcut.setExpression("execution(public String com.example.javaspringbootstudy.com.example.javaspringbootstudy.aop.AopServiceImpl.hello(String))");
         assertThat(pointcut.matches(helloMethod, AopServiceImpl.class)).isTrue();
     }
 
@@ -63,13 +63,13 @@ public class ExecutionTest {
 
     @Test
     void packageExactMatch1(){
-        pointcut.setExpression("execution(* com.example.javaspringbootstudy.aop.AopServiceImpl.hello(..))");
+        pointcut.setExpression("execution(* com.example.javaspringbootstudy.com.example.javaspringbootstudy.aop.AopServiceImpl.hello(..))");
         assertThat(pointcut.matches(helloMethod, AopServiceImpl.class)).isTrue();
     }
 
     @Test
     void packageExactMatch2(){
-        pointcut.setExpression("execution(* com.example.javaspringbootstudy.aop.*.*(..))");
+        pointcut.setExpression("execution(* com.example.javaspringbootstudy.com.example.javaspringbootstudy.aop.*.*(..))");
         assertThat(pointcut.matches(helloMethod, AopServiceImpl.class)).isTrue();
     }
 
@@ -93,19 +93,19 @@ public class ExecutionTest {
 
     @Test
     void typeExactMatch(){
-        pointcut.setExpression("execution(* com.example.javaspringbootstudy.aop.AopServiceImpl.*(..))");
+        pointcut.setExpression("execution(* com.example.javaspringbootstudy.com.example.javaspringbootstudy.aop.AopServiceImpl.*(..))");
         assertThat(pointcut.matches(helloMethod, AopServiceImpl.class)).isTrue();
     }
 
     @Test
     void typeMatchSuperType(){
-        pointcut.setExpression("execution(* com.example.javaspringbootstudy.aop.AopService.*(..))");
+        pointcut.setExpression("execution(* com.example.javaspringbootstudy.com.example.javaspringbootstudy.aop.AopService.*(..))");
         assertThat(pointcut.matches(helloMethod, AopServiceImpl.class)).isTrue();
     }
 
     @Test
     void typeMatchInternal() throws NoSuchMethodException {
-        pointcut.setExpression("execution(* com.example.javaspringbootstudy.aop.AopServiceImpl.*(..))");
+        pointcut.setExpression("execution(* com.example.javaspringbootstudy.com.example.javaspringbootstudy.aop.AopServiceImpl.*(..))");
 
         Method internalMethod = AopServiceImpl.class.getMethod("internal", String.class);
 
@@ -114,7 +114,7 @@ public class ExecutionTest {
 
     @Test
     void typeMatchNoSuperTypeMethodFalse() throws NoSuchMethodException {
-        pointcut.setExpression("execution(* com.example.javaspringbootstudy.aop.AopService.*(..))");
+        pointcut.setExpression("execution(* com.example.javaspringbootstudy.com.example.javaspringbootstudy.aop.AopService.*(..))");
 
         Method internalMethod = AopServiceImpl.class.getMethod("internal", String.class);
 

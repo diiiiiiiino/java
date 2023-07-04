@@ -1,4 +1,4 @@
-package aop;
+package com.example.javaspringbootstudy.aop;
 
 import org.springframework.stereotype.Component;
 
