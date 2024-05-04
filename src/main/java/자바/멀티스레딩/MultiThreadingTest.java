@@ -1,4 +1,4 @@
-package main.java.자바.map;
+package main.java.자바.멀티스레딩;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
