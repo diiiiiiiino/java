@@ -5,24 +5,31 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 public class GlobalIdGeneratorTest {
     private final static String format = "%s-%s-%d";
-    private GlobalIdGenerator globalIdGenerator;
+    private IdGenerator<String> globalIdGenerator;
+    private GlobalIdGenerator.MyDateTimeFormat myDateTimeFormat = mock(GlobalIdGenerator.MyDateTimeFormat.class);
 
     @BeforeEach
     void init() {
-        globalIdGenerator = new GlobalIdGenerator(format);
+        globalIdGenerator = new GlobalIdGenerator(format, myDateTimeFormat);
     }
 
     @Test
     @DisplayName("ID 형식 확인")
     void idGenerate(){
-        Assertions.assertEquals("SERVER01-1", globalIdGenerator.getId());
+        when(myDateTimeFormat.getValue()).thenReturn("20240504");
+        Assertions.assertEquals("SERVER01-20240504-0", globalIdGenerator.getId());
     }
 
     @Test
     @DisplayName("멀티 스레드 동시 처리 ID 생성 확인")
     void whenMultiThreadThenIdGenerate(){
+        when(myDateTimeFormat.getValue()).thenReturn("20240504");
+
         final int threadCount = 100;
         Thread[] threads = new Thread[threadCount];
 

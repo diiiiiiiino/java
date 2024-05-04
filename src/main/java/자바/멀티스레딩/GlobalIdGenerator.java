@@ -8,19 +8,29 @@ public final class GlobalIdGenerator implements IdGenerator<String>{
     private static String serverName = "SERVER01";
     private AtomicInteger atomicId = new AtomicInteger();
     private String format;
+    private MyDateTimeFormat myDateTimeFormat;
 
-    public GlobalIdGenerator(String format) {
+
+    public GlobalIdGenerator(String format, MyDateTimeFormat myDateTimeFormat) {
         this.format = format;
+        this.myDateTimeFormat = myDateTimeFormat;
     }
 
     @Override
     public String getId() {
         int id = atomicId.getAndIncrement();
-        return format.format(format, serverName, getDate(), id);
+        return format.format(format, serverName, myDateTimeFormat.getValue(), id);
     }
 
-    private String getDate(){
-        DateTimeFormatter yyyyMMdd = DateTimeFormatter.ofPattern("yyyyMMdd");
-        return LocalDate.now().format(yyyyMMdd);
+    public static class MyDateTimeFormat{
+        private DateTimeFormatter dateTimeFormatter;
+
+        public MyDateTimeFormat(DateTimeFormatter dateTimeFormatter) {
+            this.dateTimeFormatter = dateTimeFormatter;
+        }
+
+        public String getValue() {
+            return LocalDate.now().format(dateTimeFormatter);
+        }
     }
 }
